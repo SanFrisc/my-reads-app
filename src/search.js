@@ -1,25 +1,31 @@
 import React, { Component } from "react";
-import Bookshelf from './Bookshelf';
+import Bookshelf from "./Bookshelf";
 import * as BooksAPI from "./BooksAPI";
 
 class Search extends Component {
   state = {
-    searchResults: []
+    searchResults: [],
+    isLoading: false,
+    inputKey: "search"
   };
 
   searchBooks = event => {
     const query = event.target.value;
 
-    if (query) {
+    if (event.keyCode === 13 && query !== '') {
+      this.setState({ isLoading: true });
       BooksAPI.search(query).then(books => {
-        
-          this.setState({ searchResults: books })
+        this.setState({ searchResults: books, isLoading: false });
       });
+    } else if (event.keyCode === 27) {
+        this.setState({ searchResults: [], inputKey: new Date().valueOf() })
     }
+
+    console.log(event.keyCode);
   };
 
   render() {
-    const { searchResults } = this.state;
+    const { searchResults, isLoading, inputKey } = this.state;
     const { closeSearch } = this.props;
     return (
       <div className="search-books">
@@ -29,9 +35,10 @@ class Search extends Component {
           </button>
           <div className="search-books-input-wrapper">
             <input
+                key={inputKey}
               type="text"
               placeholder="Search by title or author"
-              onChange={this.searchBooks}
+              onKeyUp={this.searchBooks}
             />
           </div>
         </div>
@@ -39,8 +46,8 @@ class Search extends Component {
           <Bookshelf
             title="Results"
             books={searchResults}
-            // updateBook={this.onUpdateBook}
-            // isLoading={isLoading}
+            // TODO updateBook={this.onUpdateBook}
+            isLoading={isLoading}
           />
         </div>
       </div>
