@@ -6,26 +6,28 @@ class Search extends Component {
   state = {
     searchResults: [],
     isLoading: false,
-    inputKey: "search"
+    query: ""
   };
+
+  componentDidMount() {
+    this.nameInput.focus();
+  }
 
   searchBooks = event => {
     const query = event.target.value;
 
-    if (event.keyCode === 13 && query !== '') {
+    if (event.keyCode === 13 && query !== "") {
       this.setState({ isLoading: true });
       BooksAPI.search(query).then(books => {
         this.setState({ searchResults: books, isLoading: false });
       });
     } else if (event.keyCode === 27) {
-        this.setState({ searchResults: [], inputKey: new Date().valueOf() })
+      this.setState({ searchResults: [] });
     }
-
-    console.log(event.keyCode);
   };
 
   render() {
-    const { searchResults, isLoading, inputKey } = this.state;
+    const { searchResults, isLoading, query } = this.state;
     const { closeSearch } = this.props;
     return (
       <div className="search-books">
@@ -35,10 +37,14 @@ class Search extends Component {
           </button>
           <div className="search-books-input-wrapper">
             <input
-                key={inputKey}
-              type="text"
+              ref={input => {
+                this.nameInput = input;
+              }}
+              type="search"
+              value={query}
               placeholder="Search by title or author"
               onKeyUp={this.searchBooks}
+              onChange={event => this.setState({ query: event.target.value })}
             />
           </div>
         </div>
