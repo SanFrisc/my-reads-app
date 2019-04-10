@@ -7,6 +7,7 @@ class ListBooks extends Component {
         booksCurrentlyReading: [],
         booksWantToRead: [],
         booksRead: [],
+        isLoading: false
     }
 
     componentWillMount() {
@@ -15,11 +16,12 @@ class ListBooks extends Component {
         });
     }
 
-    filterBooksByShelf(books){
-        this.setState({ 
+    filterBooksByShelf(books) {
+        this.setState({
             booksCurrentlyReading: books.filter(item => item.shelf === 'currentlyReading'),
             booksWantToRead: books.filter(item => item.shelf === 'wantToRead'),
-            booksRead: books.filter(item => item.shelf === 'read')
+            booksRead: books.filter(item => item.shelf === 'read'),
+            isLoading: true
         });
     }
 
@@ -54,16 +56,16 @@ class ListBooks extends Component {
                     }
                 }
             }
-            
+
             this.filterBooksByShelf(allBooks);
 
         });
-    
+
     }
 
     render() {
 
-        const { booksCurrentlyReading, booksWantToRead, booksRead } = this.state;
+        const { booksCurrentlyReading, booksWantToRead, booksRead, isLoading } = this.state;
 
         return (
 
@@ -71,11 +73,13 @@ class ListBooks extends Component {
                 <div className="list-books-title">
                     <h1>My Reads</h1>
                 </div>
-                <div className="list-books-content">
-                    <Bookshelf title="Currently Reading" books={booksCurrentlyReading} updateBook={this.onUpdateBook} />
-                    <Bookshelf title="Want To Read" books={booksWantToRead} updateBook={this.onUpdateBook} />
-                    <Bookshelf title="Read" books={booksRead} updateBook={this.onUpdateBook} />
-                </div>
+                {isLoading ? <div>Loading content...</div> :
+                    (
+                        <div className="list-books-content">
+                            <Bookshelf title="Currently Reading" books={booksCurrentlyReading} updateBook={this.onUpdateBook} />
+                            <Bookshelf title="Want To Read" books={booksWantToRead} updateBook={this.onUpdateBook} />
+                            <Bookshelf title="Read" books={booksRead} updateBook={this.onUpdateBook} />
+                        </div>)}
 
                 <div className="open-search">
                     <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
