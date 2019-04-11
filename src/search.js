@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Bookshelf from "./Bookshelf";
+import { Link } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
 
 class Search extends Component {
@@ -28,13 +29,12 @@ class Search extends Component {
 
   render() {
     const { searchResults, isLoading, query } = this.state;
-    const { closeSearch } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <button className="close-search" onClick={() => closeSearch()}>
-            Close
-          </button>
+          <Link to="/">
+            <button className="close-search">Close</button>
+          </Link>
           <div className="search-books-input-wrapper">
             <input
               ref={input => {

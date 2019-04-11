@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { getAll, update } from "./BooksAPI";
 import Bookshelf from "./Bookshelf";
-
 class ListBooks extends Component {
   state = {
     booksCurrentlyReading: [],

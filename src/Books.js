@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 const Books = ({ books, updateBook }) => {
   const [isLoading, setIsLoading] = useState(undefined);
   useEffect(() => {
-    console.log("effect");
     setIsLoading(undefined);
   }, [books]);
 
